@@ -1,6 +1,13 @@
 ---
 ---
 
+@font-face {
+  font-family: 'CastoroTitling-Regular';
+  src: url('/assets/fonts/CastoroTitling-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @charset "utf-8";
 
 $asset_url: '{{ '/assets' | absolute_url }}';
