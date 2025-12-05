@@ -1,265 +1,316 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 18.0px Helvetica; min-height: 22.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 藝術家作品集 | [您的名字]</title>
+    <style>
+        /* --- 基礎設定與字體 --- */
+        :root {
+            --bg-color: #ffffff; /* 背景色改為白色，更清爽 */
+            --text-color: #333;
+            --accent-color: #7a7a7a;
+            --shadow-light: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* --- 頁首與介紹 --- */
+        header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-weight: 400;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .bio {
+            color: #666;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            margin: 0 12px;
+            text-decoration: none;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #000;
+        }
+
+        /* --- 分類導航 (Collections) --- */
+        .filter-nav {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: none;
+            border: 1px solid transparent;
+            cursor: pointer;
+            margin: 0 12px;
+            font-size: 1rem;
+            color: var(--text-color);
+            padding: 8px 15px;
+            transition: 0.3s;
+            border-radius: 20px;
+        }
+
+        .filter-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .filter-btn.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        /* --- 畫廊網格 (Masonry Layout) --- */
+        .gallery-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+            column-count: 3; 
+            column-gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .gallery-container { column-count: 2; }
+        }
+        @media (max-width: 600px) {
+            .gallery-container { column-count: 1; }
+        }
+
+        .art-item {
+            margin-bottom: 20px;
+            break-inside: avoid; /* 避免圖片中斷 */
+            position: relative;
+            cursor: pointer;
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .art-item.hide {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 0;
+            transition: opacity 0.4s ease-out, height 0.4s, margin-bottom 0.4s;
+        }
+
+        .art-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            box-shadow: var(--shadow-light);
+        }
+
+        /* --- 燈箱 (Lightbox) 為了展示放大圖 --- */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.98); /* 接近全白背景 */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            width: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .lightbox-caption {
+            margin-top: 15px;
+            color: #555;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s;
+        }
+        .close-btn:hover {
+            color: #f00;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="zh-TW"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;我的藝術作品集&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- 1. 基礎設定 --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--bg-color: #f9f9f9;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--text-color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--accent-color: #666;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Helvetica Neue', Arial, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--bg-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--text-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.6;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- 2. 頭部簡介區 --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 60px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 800px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 300;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.bio {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #666;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.95rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.social-links a {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-decoration: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--accent-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- 3. 分類按鈕 (Collections) --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.filter-nav {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.filter-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #888;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding-bottom: 5px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.filter-btn:hover, .filter-btn.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid #000;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- 4. 畫廊網格區 --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.gallery-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1200px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>column-count: 3; /* 瀑布流列數 */</p>
-<p class="p1"><span class="Apple-converted-space">            </span>column-gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.gallery-container { column-count: 2; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 480px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.gallery-container { column-count: 1; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.art-item {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>break-inside: avoid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.3s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.art-item img {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: auto;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0,0,0,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: transform 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.art-item:hover img {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.02);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* 隱藏被過濾掉的圖片 */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.art-item.hide {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- 5. 燈箱 (點擊放大) --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lightbox {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(255, 255, 255, 0.95);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lightbox img {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 90%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-height: 80vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 20px rgba(0,0,0,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.lightbox-caption {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #555;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.close-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>right: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>footer {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.8rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #aaa;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;[您的名字 / 藝術家名稱]&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;p class="bio"&gt;視覺藝術家 | 插畫 | 設計 &lt;br&gt; 歡迎來到我的線上作品集。&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="social-links"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#"&gt;Instagram&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;a href="#"&gt;Email&lt;/a&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;nav class="filter-nav"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="filter-btn active" onclick="filterSelection('all')"&gt;全部&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="filter-btn" onclick="filterSelection('sketch')"&gt;素描&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="filter-btn" onclick="filterSelection('oil')"&gt;油畫&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="filter-btn" onclick="filterSelection('digital')"&gt;電繪&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/nav&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="gallery-container"&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="art-item sketch" onclick="openLightbox(this)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=600" alt="素描練習 01"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="art-item oil" onclick="openLightbox(this)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;img src="https://images.unsplash.com/photo-1579783902614-a3fb39279623?w=600" alt="午後的風景"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="art-item digital" onclick="openLightbox(this)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600" alt="科幻概念圖"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="art-item sketch" onclick="openLightbox(this)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600" alt="人物速寫"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;footer&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&amp;copy; 2024 Art Portfolio. All rights reserved.</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/footer&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="lightbox" id="lightbox" onclick="closeLightbox()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;span class="close-btn"&gt;&amp;times;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;img id="lightbox-img" src=""&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="lightbox-caption" id="lightbox-caption"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- 篩選功能 ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function filterSelection(category) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var x, i;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>x = document.getElementsByClassName("art-item");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var btns = document.getElementsByClassName("filter-btn");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 按鈕樣式切換</p>
-<p class="p1"><span class="Apple-converted-space">            </span>for (i = 0; i &lt; btns.length; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>btns[i].classList.remove("active");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (btns[i].getAttribute("onclick").includes(category)) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>btns[i].classList.add("active");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// 顯示/隱藏圖片</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (category == "all") category = "";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>for (i = 0; i &lt; x.length; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>x[i].classList.remove("hide");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (x[i].className.indexOf(category) == -1) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>x[i].classList.add("hide");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- 燈箱功能 ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function openLightbox(element) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var lightbox = document.getElementById("lightbox");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var lightboxImg = document.getElementById("lightbox-img");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var caption = document.getElementById("lightbox-caption");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>var img = element.querySelector("img");</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>lightbox.style.display = "flex";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>lightboxImg.src = img.src;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>caption.innerHTML = img.alt; // 顯示圖片描述</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function closeLightbox() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById("lightbox").style.display = "none";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+    <header>
+        <h1>[您的名字 / 藝術家名稱]</h1>
+        <p class="bio">視覺藝術家 | 插畫 | 設計 | 歡迎來到我的線上作品集</p>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">ArtStation</a>
+            <a href="#">Email</a>
+        </div>
+    </header>
+
+    <nav class="filter-nav">
+        <button class="filter-btn active" data-category="all">全部</button>
+        <button class="filter-btn" data-category="sketch">素描/速寫</button>
+        <button class="filter-btn" data-category="oil">油畫</button>
+        <button class="filter-btn" data-category="digital">電繪/概念圖</button>
+    </nav>
+
+    <div class="gallery-container" id="gallery-container">
+        
+        <div class="art-item oil" data-caption="抽象風景：藍與灰的對話">
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb39279623?w=600" alt="抽象風景：藍與灰的對話">
+        </div>
+
+        <div class="art-item sketch" data-caption="人物速寫：街角的陌生人">
+            <img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=600" alt="人物速寫：街角的陌生人">
+        </div>
+
+        <div class="art-item digital" data-caption="星艦概念設計圖">
+            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600" alt="星艦概念設計圖">
+        </div>
+
+        <div class="art-item oil" data-caption="日出前的海岸線">
+            <img src="https://images.unsplash.com/photo-1579783483458-832822d992d5?w=600" alt="日出前的海岸線">
+        </div>
+        
+        <div class="art-item sketch" data-caption="靜物素描：蘋果與花瓶">
+            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600" alt="靜物素描：蘋果與花瓶">
+        </div>
+        
+        </div>
+
+    <footer>
+        &copy; 2024 Art Portfolio. All rights reserved.
+    </footer>
+
+    <div class="lightbox" id="lightbox">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="放大圖片">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 核心 JavaScript 邏輯 ---
+
+        // 1. 篩選功能
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+                filterSelection(category);
+            });
+        });
+
+        function filterSelection(category) {
+            const items = document.getElementsByClassName("art-item");
+            const btns = document.getElementsByClassName("filter-btn");
+
+            // 按鈕樣式切換
+            for (let i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+            }
+            document.querySelector(`.filter-btn[data-category="${category}"]`).classList.add("active");
+
+            // 顯示/隱藏圖片
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                // 檢查項目是否有目標類別，或目標是 'all'
+                if (category === "all" || item.classList.contains(category)) {
+                    item.classList.remove("hide");
+                } else {
+                    item.classList.add("hide");
+                }
+            }
+        }
+
+        // 2. 燈箱功能
+        document.querySelectorAll('.art-item').forEach(item => {
+            item.addEventListener('click', function() {
+                openLightbox(this);
+            });
+        });
+
+        const lightbox = document.getElementById("lightbox");
+        const lightboxImg = document.getElementById("lightbox-img");
+        const caption = document.getElementById("lightbox-caption");
+
+        function openLightbox(element) {
+            const img = element.querySelector("img");
+            const imgCaption = element.getAttribute("data-caption") || img.alt;
+
+            lightbox.style.display = "flex";
+            lightboxImg.src = img.src;
+            caption.innerHTML = imgCaption; 
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = "none";
+        }
+        
+        // 點擊燈箱背景關閉
+        lightbox.addEventListener('click', function(e) {
+            if (e.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        });
+
+        // 預設載入時顯示所有作品
+        document.addEventListener('DOMContentLoaded', () => {
+            filterSelection('all');
+        });
+        
+    </script>
+
 </body>
 </html>
