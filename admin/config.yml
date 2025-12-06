@@ -1,9 +1,17 @@
+# admin/config.yml
 backend:
-  name: git-gateway
-  branch: main # 如果你的分支是 master 請改成 master
+  name: git-gateway # 這裡還是使用 git-gateway，但 Netlify 會將它路由到 Auth0
+  branch: main 
+  # media_folder, public_folder, collections 保持不變
 
-media_folder: "images/uploads" # 上傳的圖片會存在這裡
-public_folder: "images/uploads"
+# *** 新增下方 Auth0 驗證配置 ***
+auth:
+  # 替換成您在步驟一中記錄的 Auth0 資訊
+  # Auth0 Domain (例如: dev-xxxxxx.us.auth0.com)
+  # Auth0 Client ID
+  provider: auth0
+  domain: http://dev-ar6t62uq1mds6vxc.us.auth0.com/
+  appID: 6YQHzFfozCMGrNh44zsab19ZpUImb2AO
 
 collections:
   - name: "works"
