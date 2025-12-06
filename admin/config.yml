@@ -13,17 +13,33 @@ auth:
   domain: http://dev-ar6t62uq1mds6vxc.us.auth0.com/
   appID: 6YQHzFfozCMGrNh44zsab19ZpUImb2AO
 
+# ========== ❗️ 修正處從這裡開始 ❗️ ==========
+
+# 定義圖片媒體庫
+media_library:
+  name: uploadcare
+  config:
+    multiple: true
+    public_key: 'demopublickey' # 這是演示金鑰，實際使用中您會使用 Netlify 設置
+
+# 設置圖片上傳路徑
+media_folder: "images/uploads"     # 圖片檔案將會上傳到 GitHub 專案根目錄下的 images/uploads 資料夾
+public_folder: "/images/uploads"   # 圖片在網頁上引用的公共路徑
+
+# ========== ❗️ 修正處結束 ❗️ ==========
+
+# 作品集設定 (保持不變)
 collections:
   - name: "works"
     label: "作品集"
     files:
       - name: "gallery"
         label: "作品列表"
-        file: "gallery.json" # 編輯這個檔案
+        file: "gallery.json"
         fields:
           - name: "works"
             label: "作品"
-            widget: "list" # 列表模式
+            widget: "list" 
             fields:
               - {label: "作品標題", name: "title", widget: "string"}
               - {label: "分類", name: "category", widget: "select", options: ["oil", "sketch", "digital"]}
