@@ -206,27 +206,6 @@
     </nav>
 
     <div class="gallery-container" id="gallery-container">
-        
-        <div class="art-item oil" data-caption="抽象風景：藍與灰的對話">
-            <img src="https://images.unsplash.com/photo-1579783902614-a3fb39279623?w=600" alt="抽象風景：藍與灰的對話">
-        </div>
-
-        <div class="art-item sketch" data-caption="人物速寫：街角的陌生人">
-            <img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=600" alt="人物速寫：街角的陌生人">
-        </div>
-
-        <div class="art-item digital" data-caption="星艦概念設計圖">
-            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600" alt="星艦概念設計圖">
-        </div>
-
-        <div class="art-item oil" data-caption="日出前的海岸線">
-            <img src="https://images.unsplash.com/photo-1579783483458-832822d992d5?w=600" alt="日出前的海岸線">
-        </div>
-        
-        <div class="art-item sketch" data-caption="靜物素描：蘋果與花瓶">
-            <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600" alt="靜物素描：蘋果與花瓶">
-        </div>
-        
         </div>
 
     <footer>
@@ -241,76 +220,109 @@
         </div>
     </div>
 
-    <script>
-        // --- 核心 JavaScript 邏輯 ---
+   <script>
+    // --- 核心 JavaScript 邏輯 ---
 
-        // 1. 篩選功能
-        document.querySelectorAll('.filter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const category = this.getAttribute('data-category');
-                filterSelection(category);
-            });
-        });
-
-        function filterSelection(category) {
-            const items = document.getElementsByClassName("art-item");
-            const btns = document.getElementsByClassName("filter-btn");
-
-            // 按鈕樣式切換
-            for (let i = 0; i < btns.length; i++) {
-                btns[i].classList.remove("active");
-            }
-            document.querySelector(`.filter-btn[data-category="${category}"]`).classList.add("active");
-
-            // 顯示/隱藏圖片
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                // 檢查項目是否有目標類別，或目標是 'all'
-                if (category === "all" || item.classList.contains(category)) {
-                    item.classList.remove("hide");
-                } else {
-                    item.classList.add("hide");
-                }
-            }
+    // 設定：載入作品資料
+    async function loadGallery() {
+        try {
+            const response = await fetch('gallery.json');
+            const data = await response.json();
+            renderGallery(data.works);
+        } catch (error) {
+            console.error('無法讀取作品資料:', error);
         }
+    }
 
-        // 2. 燈箱功能
-        document.querySelectorAll('.art-item').forEach(item => {
+    // 渲染畫廊 HTML
+    function renderGallery(works) {
+        const container = document.getElementById('gallery-container');
+        container.innerHTML = ''; // 清空目前內容
+
+        works.forEach(work => {
+            // 建立 div
+            const item = document.createElement('div');
+            item.className = `art-item ${work.category}`; // 加入類別
+            item.setAttribute('data-caption', work.title);
+            
+            // 建立 img
+            const img = document.createElement('img');
+            img.src = work.image;
+            img.alt = work.title;
+
+            // 組合
+            item.appendChild(img);
+            container.appendChild(item);
+
+            // 綁定燈箱點擊事件 (這是你原本的邏輯)
             item.addEventListener('click', function() {
                 openLightbox(this);
             });
         });
 
-        const lightbox = document.getElementById("lightbox");
-        const lightboxImg = document.getElementById("lightbox-img");
-        const caption = document.getElementById("lightbox-caption");
+        // 載入完成後，執行一次篩選以確保顯示正確
+        filterSelection('all');
+    }
 
-        function openLightbox(element) {
-            const img = element.querySelector("img");
-            const imgCaption = element.getAttribute("data-caption") || img.alt;
+    // 1. 篩選功能 (保持不變)
+    document.querySelectorAll('.filter-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            filterSelection(category);
+        });
+    });
 
-            lightbox.style.display = "flex";
-            lightboxImg.src = img.src;
-            caption.innerHTML = imgCaption; 
+    function filterSelection(category) {
+        const items = document.getElementsByClassName("art-item");
+        const btns = document.getElementsByClassName("filter-btn");
+
+        // 按鈕樣式切換
+        for (let i = 0; i < btns.length; i++) {
+            btns[i].classList.remove("active");
         }
+        document.querySelector(`.filter-btn[data-category="${category}"]`).classList.add("active");
 
-        function closeLightbox() {
-            lightbox.style.display = "none";
-        }
-        
-        // 點擊燈箱背景關閉
-        lightbox.addEventListener('click', function(e) {
-            if (e.target.id === 'lightbox') {
-                closeLightbox();
+        // 顯示/隱藏圖片
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (category === "all" || item.classList.contains(category)) {
+                item.classList.remove("hide");
+            } else {
+                item.classList.add("hide");
             }
-        });
+        }
+    }
 
-        // 預設載入時顯示所有作品
-        document.addEventListener('DOMContentLoaded', () => {
-            filterSelection('all');
-        });
-        
-    </script>
+    // 2. 燈箱功能 (保持不變)
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const caption = document.getElementById("lightbox-caption");
+
+    function openLightbox(element) {
+        const img = element.querySelector("img");
+        const imgCaption = element.getAttribute("data-caption") || img.alt;
+
+        lightbox.style.display = "flex";
+        lightboxImg.src = img.src;
+        caption.innerHTML = imgCaption; 
+    }
+
+    function closeLightbox() {
+        lightbox.style.display = "none";
+    }
+    
+    lightbox.addEventListener('click', function(e) {
+        if (e.target.id === 'lightbox') {
+            closeLightbox();
+        }
+    });
+
+    // 程式入口：網頁載入後先抓資料
+    document.addEventListener('DOMContentLoaded', () => {
+        loadGallery();
+    });
+    
+</script>
 
 </body>
 </html>
