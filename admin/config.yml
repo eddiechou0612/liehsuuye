@@ -1,23 +1,22 @@
-# admin/config.yml
 backend:
-  name: github
-  repo: your-username/your-repo-name # 替換成您的 GitHub 專案名稱 (例如: myname/art-portfolio)
-  branch: main # 確保與您的主分支名稱一致
+  name: git-gateway
+  branch: main # 如果你的分支是 master 請改成 master
 
-# *** 新增下方 oauth 區塊 ***
-oauth:
-  provider: github
-  client_id: Ov23liLQsztT846t2eB5 # 替換成步驟 A 獲取的 Client ID
-  auth_url: https://github.com/login/oauth/authorize
-  token_url: https://github.com/login/oauth/access_token
-  base_url: https://github.com/
-  auth_scope: repo, user
-
-# Media and Collections settings remain the same...
-media_folder: "images/uploads"
+media_folder: "images/uploads" # 上傳的圖片會存在這裡
 public_folder: "images/uploads"
-# ... (下方接續您的 works collection 設定)
+
 collections:
   - name: "works"
     label: "作品集"
-    # ...
+    files:
+      - name: "gallery"
+        label: "作品列表"
+        file: "gallery.json" # 編輯這個檔案
+        fields:
+          - name: "works"
+            label: "作品"
+            widget: "list" # 列表模式
+            fields:
+              - {label: "作品標題", name: "title", widget: "string"}
+              - {label: "分類", name: "category", widget: "select", options: ["oil", "sketch", "digital"]}
+              - {label: "圖片", name: "image", widget: "image"}
