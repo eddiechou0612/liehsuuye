@@ -1,0 +1,19 @@
+{
+  "works": [
+    {
+      "title": "抽象風景：藍與灰的對話",
+      "category": "oil",
+      "image": "https://images.unsplash.com/photo-1579783902614-a3fb39279623?w=600"
+    },
+    {
+      "title": "人物速寫：街角的陌生人",
+      "category": "sketch",
+      "image": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=600"
+    },
+    {
+      "title": "星艦概念設計圖",
+      "category": "digital",
+      "image": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600"
+    }
+  ]
+}
