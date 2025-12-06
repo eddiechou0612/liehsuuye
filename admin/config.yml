@@ -1,17 +1,17 @@
-# admin/config.yml
 backend:
-  name: git-gateway # 這裡還是使用 git-gateway，但 Netlify 會將它路由到 Auth0
-  branch: main 
-  # media_folder, public_folder, collections 保持不變
+  name: github
+  repo: eddiechou0612/liehsuuye # ❗️ 替換成您的 GitHub 專案路徑 (例: myname/art-portfolio)
+  branch: main # 確保您的分支名稱正確 (main 或 master)
 
-# *** 新增下方 Auth0 驗證配置 ***
-auth:
-  # 替換成您在步驟一中記錄的 Auth0 資訊
-  # Auth0 Domain (例如: dev-xxxxxx.us.auth0.com)
-  # Auth0 Client ID
-  provider: auth0
-  domain: http://dev-ar6t62uq1mds6vxc.us.auth0.com/
-  appID: 6YQHzFfozCMGrNh44zsab19ZpUImb2AO
+# *** 這是 OAuth 登入的配置 ***
+oauth:
+  provider: github
+  # ❗️ 替換成您在步驟一獲取的 Client ID
+  client_id: Ov23liLQsztT846t2eB5
+  auth_url: https://github.com/login/oauth/authorize
+  token_url: https://github.com/login/oauth/access_token
+  base_url: https://github.com/
+  auth_scope: repo, user # 授予讀寫倉庫和使用者資訊的權限
 
 # ========== ❗️ 修正處從這裡開始 ❗️ ==========
 
