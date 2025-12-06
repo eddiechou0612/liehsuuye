@@ -1,0 +1,22 @@
+backend:
+  name: git-gateway
+  branch: main # 如果你的分支是 master 請改成 master
+
+media_folder: "images/uploads" # 上傳的圖片會存在這裡
+public_folder: "images/uploads"
+
+collections:
+  - name: "works"
+    label: "作品集"
+    files:
+      - name: "gallery"
+        label: "作品列表"
+        file: "gallery.json" # 編輯這個檔案
+        fields:
+          - name: "works"
+            label: "作品"
+            widget: "list" # 列表模式
+            fields:
+              - {label: "作品標題", name: "title", widget: "string"}
+              - {label: "分類", name: "category", widget: "select", options: ["oil", "sketch", "digital"]}
+              - {label: "圖片", name: "image", widget: "image"}
